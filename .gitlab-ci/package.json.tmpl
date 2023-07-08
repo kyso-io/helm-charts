@@ -1,0 +1,9 @@
+{
+  "name": "multi-semantic-release",
+  "version": "0.0.0-semantically-released",
+  "private": true,
+  "multi-release": {
+    "tagFormat": "${name}@${version}"
+  },
+  "workspaces": {{ .chart_paths | toJson }}
+}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jupyter-diff.fullname" . }}
+  labels:
+    {{- include "jupyter-diff.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+  {{- if not .Values.endpoint.enabled }}
+  selector:
+    {{- include "jupyter-diff.selectorLabels" . | nindent 4 }}
+  {{- end }}

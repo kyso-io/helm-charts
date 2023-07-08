@@ -1,0 +1,9 @@
+apiVersion: v2
+name: analytics-consumer
+description: A Helm chart to deploy analytics-consumer
+# Chart type
+type: application
+# Chart version.
+version: 1.0.0
+# Version number of the application being deployed.
+appVersion: ''

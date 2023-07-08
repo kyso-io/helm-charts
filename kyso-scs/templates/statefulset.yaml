@@ -1,0 +1,217 @@
+{{- $appName := include "kyso-scs.fullname" . }}
+{{- $dataPvcName := .Values.dataPvcName | default (printf "%s-pvc" $appName) }}
+{{- $dataVolName := .Values.dataVolName | default (printf "%s-data" $appName) }}
+{{- $fileSecretsVolName := printf "%s-filesecrets" $appName }}
+{{- $indexerSecretsName := printf "%s-indexer-secret" $appName }}                                                                                  
+{{- $sftpPubUser := .Values.sftpPubUser }}
+{{- $sftpScsUser := .Values.sftpScsUser }}
+{{- $sftpUsers := list $sftpPubUser $sftpScsUser }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $appName }}
+  labels:
+    {{- include "kyso-scs.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ $appName }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kyso-scs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+      labels:
+        {{- include "kyso-scs.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        {{- with .Values.imagePullSecrets }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      serviceAccountName: {{ include "kyso-scs.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      automountServiceAccountToken: true
+      initContainers:
+        {{- with .Values.containers.myssh }}
+        {{- if .enabled }}
+        - name: k8s-init
+          {{- with .image }}
+          image: '{{ printf "%s:%s" .repository .tag }}'
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          args:
+            - 'k8s-init'
+            {{- range $sftpUsers }}
+            - '{{ . }}'
+            {{- end }}
+          env:
+            - name: MYSSH_SFTP_UID
+              value: '2020'
+            - name: MYSSH_SFTP_GID
+              value: '2020'
+            - name: MYSSH_HOST_KEYS_FILE
+              value: 'host_keys.txt'
+            - name: MYSSH_USER_KEYS_FILE
+              value: 'user_keys.txt'
+            - name: MYSSH_USER_PASS_FILE
+              value: 'user_pass.txt'
+            - name: MYSSH_USER_SIDS_FILE
+              value: 'user_sids.tgz'
+            - name: MYSSH_SECRET_NAME
+              value: '{{ .secretName }}'
+          volumeMounts:
+            - mountPath: '/fileSecrets'
+              name: {{ $fileSecretsVolName }}
+              readOnly: false
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      containers:
+        {{- with .Values.containers.indexer }}
+        {{- if and .enabled (not .endpoint.enabled) }}
+        - name: indexer
+          {{- with .image }}
+          image: {{ printf "%s:%s" .repository .tag }}
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          ports:
+            {{- with .service }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+            {{- end }}
+          env:
+            # Will be empty, we use the /work/config file
+            # Left here just in case it is useful in the future
+            {{- toYaml .env | nindent 12 }}
+          volumeMounts:
+            - mountPath: '/work/config'
+              name: {{ $indexerSecretsName }}
+              readOnly: true
+            - mountPath: '/sftp'
+              name: {{ $dataVolName }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        {{- with  .Values.containers.myssh }}
+        {{- if .enabled }}
+        - name: myssh
+          {{- with .image }}
+          image: {{ printf "%s:%s" .repository .tag }}
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          ports:
+            {{- with .service }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+            {{- end }}
+          securityContext:
+            capabilities:
+              add:
+                - IPC_OWNER
+          env:
+            - name: MYSSH_SFTP_UID
+              value: '2020'
+            - name: MYSSH_SFTP_GID
+              value: '2020'
+            - name: MYSSH_HOST_KEYS_FILE
+              value: 'host_keys.txt'
+            - name: MYSSH_USER_KEYS_FILE
+              value: 'user_keys.txt'
+            - name: MYSSH_USER_PASS_FILE
+              value: 'user_pass.txt'
+            - name: MYSSH_USER_SIDS_FILE
+              value: 'user_sids.tgz'
+            - name: MYSSH_SECRET_NAME
+              value: '{{ .secretName }}'
+          volumeMounts:
+          - mountPath: '/fileSecrets'
+            name: {{ $fileSecretsVolName }}
+            readOnly: true
+          - mountPath: '/sftp'
+            name: {{ $dataVolName }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        {{- with  .Values.containers.nginx }}
+        {{- if .enabled }}
+        - name: nginx
+          {{- with .image }}
+          image: {{ printf "%s:%s" .repository .tag }}
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          ports:
+            {{- with .service }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+            {{- end }}
+          env:
+            {{- toYaml .env | nindent 12 }}
+            - name: NO_AUTH_PREFIX
+              value: '/{{ $sftpPubUser }}'
+            - name: HTML_ROOT
+              value: '/sftp/data'
+          volumeMounts:
+            - mountPath: '/sftp'
+              name: {{ $dataVolName }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        {{- with  .Values.containers.webhook}}
+        {{- if .enabled }}
+        - name: webhook
+          {{- with .image }}
+          image: {{ printf "%s:%s" .repository .tag }}
+          imagePullPolicy: {{ .pullPolicy }}
+          {{- end }}
+          securityContext:
+            privileged: true
+          ports:
+            {{- with .service }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+            {{- end }}
+          env:
+            {{- toYaml .env | nindent 12 }}
+            - name: WEBHOOK_WORKDIR
+              value: '/sftp/data/{{ $sftpScsUser }}'
+          volumeMounts:
+            - mountPath: '/dev/fuse'
+              name: devfuse
+            - mountPath: '/sftp'
+              name: {{ $dataVolName }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      volumes:
+        {{- with .Values.containers }}
+        {{- if and .indexer.enabled (not .indexer.endpoint.enabled) }}
+        - name: {{ $indexerSecretsName }}
+          secret:
+            secretName: {{ $indexerSecretsName }}
+        {{- end }}
+        {{- if or .indexer.enabled .myssh.enabled .nginx.enabled .webhook.enabled }}
+        - name: {{ $dataVolName }}
+          persistentVolumeClaim:
+            claimName: {{ $dataPvcName }}
+        {{- end }}
+        {{- if .myssh.enabled }}
+        - name: {{ $fileSecretsVolName }}
+          emptyDir : {}
+        {{- end }}
+        {{- if .webhook.enabled }}
+        - name: devfuse
+          hostPath:
+            path: '/dev/fuse'
+        {{- end }}
+        {{- end }}

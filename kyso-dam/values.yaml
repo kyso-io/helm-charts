@@ -1,0 +1,83 @@
+# Default values for kyso-dam.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+image:
+  repository: registry.kyso.io/kyso-io/kyso-dam
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+# Endpoint settings, enable it to use instead of a deployment
+endpoint:
+  enabled: false
+  ip: ""
+  port: ""
+
+# Service data
+service:
+  type: ClusterIP
+  port: 80
+  # kyso-dam container port
+  targetPort: 8880
+
+# Ingress configuration
+ingress:
+  authApiPath: '/v1/auth/check-app-permissions'
+  className: 'nginx'
+  rewriteTarget: '/app'
+  annotations: {}
+  hosts:
+    - host: '*.app.lo.kyso.io'
+  tls: []
+    #  - hosts:
+    #      - '*.app.lo.kyso.io'
+    #    secretName: lo.kyso.io-tls
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Configuration values for the kyso-dam application
+# NOTE:
+# The BUILD_NAMESPACE and EXEC_NAMESPACE are added by the templates to
+# the environment, as they are managed by the Chart, not the user.
+env:
+  KYSO_DOMAIN: "lo.kyso.io"
+  KYSO_API_URL: "http://kyso-api/api"
+  KYSO_APP_DOMAIN: "app.lo.kyso.io"
+  REGISTRY_HOSTNAME: "zot.lo.kyso.io"
+  REGISTRY_ADMIN_SECRET: "dockerconfigjson"
+  REGISTRY_USER_SECRET: "dockerconfigjson"
+  REGISTRY_URL: "https://zot.lo.kyso.io"
+  BUILDER_TOOL: "kaniko"
+  DIND_BUILDER_IMAGE: "zot.lo.kyso.io/kyso-dam-builder-dind:latest"
+  KANIKO_BUILDER_IMAGE: "zot.lo.kyso.io/kyso-dam-builder-kaniko:latest"
+  KYSO_CLI_IMAGE: "zot.lo.kyso.io/kyso-cli:latest"

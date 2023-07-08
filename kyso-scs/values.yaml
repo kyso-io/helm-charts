@@ -1,0 +1,133 @@
+# Default values for kyso-scs.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+# persistentVolumeClaim name for the volume (this chart leaves the volume
+# management to the user for now); if not set the default is '$HELM_RELEASE-pvc'
+dataPvcName: ''
+# volume name, it is interesting to be able to set it up to use it with
+# annotations for velero; if not set the default is '$HEML_RELEASE-data'
+dataVolName: ''
+# sftp users
+sftpPubUser: 'pub'
+sftpScsUser: 'scs'
+# Cronjobs
+cronjobs:
+  hardlink:
+    enabled: true
+    image:
+      repository: registry.kyso.io/docker/alpine
+      pullPolicy: IfNotPresent
+      tag: 'latest'
+    # Run each night by default
+    schedule: '0 0 * * *'
+    # The url has to be set to make the cronjob useful
+    webhookUrl: ''
+# Containers
+containers:
+  indexer:
+    enabled: true
+    endpoint:
+      # if the endpoint is enabled we use it instead of the image
+      enabled: false
+      ip: ''
+      port: ''
+    config:
+      # The following values are used by the application.yaml config file
+      cronExpr: '*/30 * * * * ?'
+      # The following values must be set to make the indexer work; on a kitt
+      # deployment the elasticsearch url can be 'http://elasticsearch:9200' but
+      # the mongodbDatabaseUri needs at least the kysodb user password (i.e.
+      # 'mongodb://kysodb:$MONGODB_PASS@mongodb').
+      elasticsearchUrl: ''
+      mongodbDatabaseUri: ''
+    image:
+      repository: registry.kyso.io/kyso-io/kyso-indexer
+      pullPolicy: IfNotPresent
+      tag: 'latest'
+    service:
+      name: indexer-http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  myssh:
+    enabled: true
+    image:
+      repository: registry.kyso.io/docker/mysecureshell
+      pullPolicy: IfNotPresent
+      tag: '2.0.0'
+    # if empty the default value is 'mysecureshell-secret'
+    secretName: ''
+    service:
+      name: sftp
+      port: 2020
+      targetPort: 22
+      protocol: TCP
+  nginx:
+    enabled: true
+    image:
+      repository: registry.kyso.io/docker/nginx-scs
+      pullPolicy: IfNotPresent
+      tag: '3.0.0'
+    service:
+      name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    env:
+      # We need to add this value to make the system work with the sftpScsUser
+      - name: AUTH_REQUEST_URI
+        value: ''
+      # The rest of the settings are fixed for now, no need to customize them
+  webhook:
+    enabled: true
+    image:
+      repository: registry.kyso.io/docker/webhook-scs
+      pullPolicy: IfNotPresent
+      tag: '1.2.6'
+    service:
+      name: webhook-http
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+    env:
+      # We need to add this value to make the webhook work, 'http://kyso-api'
+      # would be a sensible default for clusers deployed with kitt.
+      - name: KYSO_URL
+        value: ''
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+service:
+  type: ClusterIP
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+# Ingress configuration
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: true
+    # nginx.ingress.kubernetes.io/proxy-body-size: 500m
+  hosts: []
+    #  - host: lo.kyso.io (paths are generated automatically)
+  tls: []
+    #  - hosts:
+    #      - lo.kyso.io
+    #    secretName: lo.kyso.io-tls
+resources: {}
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+nodeSelector: {}
+tolerations: []
+affinity: {}

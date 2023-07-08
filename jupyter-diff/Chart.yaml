@@ -1,0 +1,9 @@
+apiVersion: v2
+name: jupyter-diff
+description: A Helm chart to deploy jupyter-diff
+# Chart type
+type: application
+# Chart version.
+version: 1.0.0
+# Version number of the application being deployed.
+appVersion: ''

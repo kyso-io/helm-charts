@@ -1,0 +1,69 @@
+{{- $containerPort := .Values.service.targetPort }}
+{{- $secretsName := printf "%s-secrets" (include "mongo-gui.fullname" . | trunc 59) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mongo-gui.fullname" . }}
+  labels:
+    {{- include "mongo-gui.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mongo-gui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mongo-gui.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mongo-gui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: mongo-gui-http
+              containerPort: {{ $containerPort }}
+              protocol: TCP
+          env:
+          - name: URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ $secretsName }}
+                key: URL
+          livenessProbe:
+            httpGet:
+              path: /mongo-gui/index.html.gz
+              port: mongo-gui-http
+          readinessProbe:
+            httpGet:
+              path: /mongo-gui/index.html.gz
+              port: mongo-gui-http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

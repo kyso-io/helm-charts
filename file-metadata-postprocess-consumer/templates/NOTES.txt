@@ -1,0 +1,3 @@
+1. To see if the file-metadata-postprocess-consumer is deployed execute the following:
+
+  kubectl get --namespace {{ .Release.Namespace }} deployment/{{ include "file-metadata-postprocess-consumer.fullname" . }}
