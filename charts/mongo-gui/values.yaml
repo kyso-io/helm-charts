@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.kyso.io/docker/mongo-gui
+  repository: ugleiton/mongo-gui
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

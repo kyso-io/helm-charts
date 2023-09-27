@@ -4,7 +4,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.kyso.io/kyso-io/kyso-dam
+  repository: kyso/kyso-dam
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""

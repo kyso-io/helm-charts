@@ -16,7 +16,7 @@ cronjobs:
   hardlink:
     enabled: true
     image:
-      repository: registry.kyso.io/docker/alpine
+      repository: alpine
       pullPolicy: IfNotPresent
       tag: 'latest'
     # Run each night by default
@@ -42,7 +42,7 @@ containers:
       elasticsearchUrl: ''
       mongodbDatabaseUri: ''
     image:
-      repository: registry.kyso.io/kyso-io/kyso-indexer
+      repository: kyso/kyso-indexer
       pullPolicy: IfNotPresent
       tag: 'latest'
     service:
@@ -53,7 +53,7 @@ containers:
   myssh:
     enabled: true
     image:
-      repository: registry.kyso.io/docker/mysecureshell
+      repository: kyso/mysecureshell
       pullPolicy: IfNotPresent
       tag: '2.0.0'
     # if empty the default value is 'mysecureshell-secret'
@@ -66,7 +66,7 @@ containers:
   nginx:
     enabled: true
     image:
-      repository: registry.kyso.io/docker/nginx-scs
+      repository: kyso/nginx-scs
       pullPolicy: IfNotPresent
       tag: '3.0.0'
     service:
@@ -82,7 +82,7 @@ containers:
   webhook:
     enabled: true
     image:
-      repository: registry.kyso.io/docker/webhook-scs
+      repository: kyso/webhook-scs
       pullPolicy: IfNotPresent
       tag: '1.2.6'
     service:

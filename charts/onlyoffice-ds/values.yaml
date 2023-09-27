@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.kyso.io/docker/onlyoffice-documentserver
+  repository: onlyoffice/documentserver
   pullPolicy: IfNotPresent
   # By default, same version as the chart appVersion.
   tag: '7.2.0.204'
