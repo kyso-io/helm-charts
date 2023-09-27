@@ -1,0 +1,157 @@
+apiVersion: v1
+entries:
+  activity-feed-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:12:59.537152989Z"
+    description: A Helm chart to deploy activity-feed-consumer
+    digest: 2e13dc9bf062e233c4b1a6c9e2df3224b4840cbb963668da73e8dc40711e20db
+    name: activity-feed-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/activity-feed-consumer-1.0.0/activity-feed-consumer-1.0.0.tgz
+    version: 1.0.0
+  analytics-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:12:59.699861879Z"
+    description: A Helm chart to deploy analytics-consumer
+    digest: c946388a9fa51885ad3aa2b7693e35bc35dcb4c486a2b6ce39792cc1a433eba0
+    name: analytics-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/analytics-consumer-1.0.0/analytics-consumer-1.0.0.tgz
+    version: 1.0.0
+  file-metadata-postprocess-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:12:59.839658543Z"
+    description: A Helm chart to deploy file-metadata-postprocess-consumer
+    digest: 20b87291893ab4d5fe88b1a8fded00b0c0ce9ce94288f9ab689f1ed277a65174
+    name: file-metadata-postprocess-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/file-metadata-postprocess-consumer-1.0.0/file-metadata-postprocess-consumer-1.0.0.tgz
+    version: 1.0.0
+  imagebox:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2023-09-27T11:12:59.964199724Z"
+    description: A Helm chart to deploy imagebox
+    digest: 953649dc8d53eee475fd088346a2315436b0915be7c491dae49aacc49eee3b49
+    name: imagebox
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/imagebox-1.0.0/imagebox-1.0.0.tgz
+    version: 1.0.0
+  jupyter-diff:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:00.100943671Z"
+    description: A Helm chart to deploy jupyter-diff
+    digest: ecc4b6486df7ad41c4be35839b571ec7022465a9a8f6570948ca638825e35a67
+    name: jupyter-diff
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/jupyter-diff-1.0.0/jupyter-diff-1.0.0.tgz
+    version: 1.0.0
+  kyso-api:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:00.294019527Z"
+    description: A Helm chart to deploy kyso-api
+    digest: e6fff4643f27340f8eabb8f064aa41c327c76a17745ef1825d133c16c0da6d33
+    name: kyso-api
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/kyso-api-1.0.0/kyso-api-1.0.0.tgz
+    version: 1.0.0
+  kyso-dam:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-09-27T11:13:00.440088225Z"
+    description: A Helm chart to deploy kyso-dam
+    digest: adf7bceeeba23e3205c6c44714455591d4e570a11a66dffaeaca7e852e2c98fb
+    name: kyso-dam
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/kyso-dam-1.0.0/kyso-dam-1.0.0.tgz
+    version: 1.0.0
+  kyso-front:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:00.59278396Z"
+    description: A Helm chart to deploy kyso-front
+    digest: 263bc737015a651d040bdcf0f91830183f83ed51a1e919d11ddd01c7ff5ee934
+    name: kyso-front
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/kyso-front-1.0.0/kyso-front-1.0.0.tgz
+    version: 1.0.0
+  kyso-nbdime:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:00.729898109Z"
+    description: A Helm chart to deploy kyso-nbdime
+    digest: e5d2854c04c57c667ea4c0565618f670c6926adeeb50b0e13804f906462d8ecc
+    name: kyso-nbdime
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/kyso-nbdime-1.0.0/kyso-nbdime-1.0.0.tgz
+    version: 1.0.0
+  kyso-scs:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:00.954416637Z"
+    description: A Helm chart to deploy kyso-scs
+    digest: 84bdbcb9cde8edf1d6ad4d39e75545de78b083bdc8ecc99b5887b57f8759bd66
+    name: kyso-scs
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/kyso-scs-1.0.0/kyso-scs-1.0.0.tgz
+    version: 1.0.0
+  mongo-gui:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-09-27T11:13:01.140680755Z"
+    description: A Helm chart to deploy mongo-gui
+    digest: afb5980370351f6a774f1b2f42e867fb276fe4442a36cb940d0153166352425d
+    name: mongo-gui
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/mongo-gui-1.0.0/mongo-gui-1.0.0.tgz
+    version: 1.0.0
+  notification-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:01.322109647Z"
+    description: A Helm chart to deploy notification-consumer
+    digest: 60456cf5c22412819e8d6c93511265f2db697dfc7070f4e13d21b56a066b46c8
+    name: notification-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/notification-consumer-1.0.0/notification-consumer-1.0.0.tgz
+    version: 1.0.0
+  onlyoffice-ds:
+  - apiVersion: v2
+    appVersion: 7.2.0.204
+    created: "2023-09-27T11:13:01.549928992Z"
+    description: A Helm chart to deploy onlyoffice-ds
+    digest: 1bc4358f26b8f243eba041452d03c32355f2f3eb167d2fab8dd5dc1cab0e4537
+    name: onlyoffice-ds
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/onlyoffice-ds-1.0.0/onlyoffice-ds-1.0.0.tgz
+    version: 1.0.0
+  slack-notifications-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:01.686602639Z"
+    description: A Helm chart to deploy slack-notifications-consumer
+    digest: b80b1e097623219c0b2745dee900563e14fb48f4aee509953ba15d862dd90bb1
+    name: slack-notifications-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/slack-notifications-consumer-1.0.0/slack-notifications-consumer-1.0.0.tgz
+    version: 1.0.0
+  teams-notification-consumer:
+  - apiVersion: v2
+    created: "2023-09-27T11:13:01.846163711Z"
+    description: A Helm chart to deploy teams-notification-consumer
+    digest: e372315da1b4b7b1f0a051055e3fc76db9dd804ac06c091d6bdc0d97db56d4a7
+    name: teams-notification-consumer
+    type: application
+    urls:
+    - https://github.com/kyso-io/helm-charts/releases/download/teams-notification-consumer-1.0.0/teams-notification-consumer-1.0.0.tgz
+    version: 1.0.0
+generated: "2023-09-27T11:12:59.332036368Z"
