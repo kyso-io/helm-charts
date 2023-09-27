@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.kyso.io/docker/imagebox
+  repository: kyso/imagebox
   pullPolicy: IfNotPresent
   # By default, same version as the chart appVersion.
   tag: 'latest'
