@@ -1,3 +1,0 @@
-1. To see if the kyso-nbdime is deployed execute the following:
-
-  kubectl get --namespace {{ .Release.Namespace }} deployment/{{ include "kyso-nbdime.fullname" . }}

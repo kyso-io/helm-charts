@@ -1,2 +1,0 @@
-# Kyso's Helm Charts
-

@@ -1,9 +1,0 @@
-apiVersion: v2
-name: slack-notifications-consumer
-description: A Helm chart to deploy slack-notifications-consumer
-# Chart type
-type: application
-# Chart version.
-version: 1.0.0
-# Version number of the application being deployed.
-appVersion: ''

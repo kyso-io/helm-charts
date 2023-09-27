@@ -1,9 +1,0 @@
-apiVersion: v2
-name: file-metadata-postprocess-consumer
-description: A Helm chart to deploy file-metadata-postprocess-consumer
-# Chart type
-type: application
-# Chart version.
-version: 1.0.0
-# Version number of the application being deployed.
-appVersion: ''

@@ -1,9 +1,0 @@
-# The Role object is needed to use kubectl to manage the myssh secrets for us.
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: k8s-secret-account
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

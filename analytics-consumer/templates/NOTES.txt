@@ -1,3 +1,0 @@
-1. To see if the analytics-consumer is deployed execute the following:
-
-  kubectl get --namespace {{ .Release.Namespace }} deployment/{{ include "analytics-consumer.fullname" . }}

@@ -1,3 +1,0 @@
-1. To see if the notification-consumer is deployed execute the following:
-
-  kubectl get --namespace {{ .Release.Namespace }} deployment/{{ include "notification-consumer.fullname" . }}
